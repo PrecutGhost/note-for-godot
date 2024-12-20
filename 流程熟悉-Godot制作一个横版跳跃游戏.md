@@ -34,7 +34,7 @@
 
 + 给玩家创建脚本，使用初始化移动脚本，脚本内容如下：
 
-```gdcript
+```gdscript
 extends CharacterBody2D
 
 // 声明移动速度和跳跃速度常量
