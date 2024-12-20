@@ -34,7 +34,7 @@
 
 + 给玩家创建脚本，使用初始化移动脚本，脚本内容如下：
 
-```javascript
+```gdcript
 extends CharacterBody2D
 
 // 声明移动速度和跳跃速度常量
@@ -81,11 +81,11 @@ elif direction < 0:
   animated_sprite.flip_h = true
 ```
 
-    - 为玩家添加更多动画：player场景动画编辑器中添加跳跃、奔跑、死亡动画；
+- 为玩家添加更多动画：player场景动画编辑器中添加跳跃、奔跑、死亡动画；
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/50617026/1734417033755-8e74364b-a430-409f-b3e4-b40a23f57939.png)
 
-    - 在脚本中设置动画触发事件：
+- 在脚本中设置动画触发事件：
 
 ```javascript
 // 引入玩家动画声明
