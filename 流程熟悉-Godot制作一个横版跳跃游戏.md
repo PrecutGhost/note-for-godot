@@ -37,22 +37,22 @@
 ```gdscript
 extends CharacterBody2D
 
-// 声明移动速度和跳跃速度常量
+# 声明移动速度和跳跃速度常量
 const SPEED = 130.0
 const JUMP_VELOCITY = -300.0
 
-// 引用物理引擎，将物理引擎独立于游戏引擎，固定60帧率
+# 引用物理引擎，将物理引擎独立于游戏引擎，固定60帧率
 func _physics_process(delta: float) -> void:
-// 添加重力引擎，并设置如果玩家没有位于地板上，则受重力影响下落
+# 添加重力引擎，并设置如果玩家没有位于地板上，则受重力影响下落
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-// 设置跳跃，按下跳跃键，玩家位于地板上进行跳跃
+# 设置跳跃，按下跳跃键，玩家位于地板上进行跳跃
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-// 设置方向键输入，改变玩家移动方向
-// 最好用自定义游戏操作，替换UI操作
+# 设置方向键输入，改变玩家移动方向
+# 最好用自定义游戏操作，替换UI操作
 	var direction := Input.get_axis("ui_left", "ui_right")
 	if direction:
 		velocity.x = direction * SPEED
@@ -70,11 +70,11 @@ func _physics_process(delta: float) -> void:
 + 完善角色动作变现细节：
     - 根据移动方向翻转：脚本中引入玩家animated_sprite声明，在获取移动方向之后，添加用于判断并改变方向的if语句，利用动画中的flip_h属性改变方向，代码如下：
 
-```javascript
-// 引入玩家动画声明
+```gdscript
+# 引入玩家动画声明
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-// 判断玩家方向并调整玩家朝向翻转
+# 判断玩家方向并调整玩家朝向翻转
 if direction > 0:
   animated_sprite.flip_h = false
 elif direction < 0:
@@ -87,17 +87,17 @@ elif direction < 0:
 
 - 在脚本中设置动画触发事件：
 
-```javascript
-// 引入玩家动画声明
+```gdscript
+# 引入玩家动画声明
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-// 判断玩家方向并调整玩家朝向翻转
+# 判断玩家方向并调整玩家朝向翻转
 if direction > 0:
   animated_sprite.flip_h = false
 elif direction < 0:
   animated_sprite.flip_h = true
 
-// 判断玩家是否处于地面上，是则通过方向播放闲置或奔跑动画，否则触发跳跃动画；
+# 判断玩家是否处于地面上，是则通过方向播放闲置或奔跑动画，否则触发跳跃动画；
 if is_on_floor():
   if direction == 0:
     animated_sprite.play("idle")
@@ -113,16 +113,16 @@ else:
 + 添加碰撞形状CollisionShape2D;
 + 添加拾取脚本，创建初始脚本；
 
-```javascript
+```gdscript
 extends Area2D
 
 
-// ready函数在节点进入场景树的时候被调用，在这里放置希望立即执行的代码
+# ready函数在节点进入场景树的时候被调用，在这里放置希望立即执行的代码
 func _ready() -> void:
   pass # Replace with function body.
 
 
-// Called every frame. 'delta' is the elapsed time since the previous frame.
+# Called every frame. 'delta' is the elapsed time since the previous frame.
   func _process(delta: float) -> void:
     pass
 
@@ -136,14 +136,14 @@ func _ready() -> void:
 
 代码变更为：
 
-```javascript
+```gdscript
 extends Area2D
 
-// 绑定节点触发信号
+# 绑定节点触发信号
 func _on_body_entered(body: Node2D) -> void:
-// 设置触发事件
+# 设置触发事件
   print("+1 coin!")
-// 设置收集并清除拾取物
+# 设置收集并清除拾取物
   queue_free()
 ```
 
@@ -161,51 +161,51 @@ func _on_body_entered(body: Node2D) -> void:
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/50617026/1734338732859-4c409255-fcf9-49bc-b2d3-58b2aa3b4df8.png)
 
-    - 把killzone场景添加到主场景中，并设置碰撞形状为worldboundaryshape2D，移动放于地图最下方，避免偶然碰触
+ - 把killzone场景添加到主场景中，并设置碰撞形状为worldboundaryshape2D，移动放于地图最下方，避免偶然碰触
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/50617026/1734338916795-4d801e43-113b-427a-a619-9999436fddfc.png)
 
-    - 给死亡地带设置脚本-引用信号（同样使用body_enter），打印“You die!”测试
-    - 加入计时器，设置时间延迟，并设置单次触发
+ - 给死亡地带设置脚本-引用信号（同样使用body_enter），打印“You die!”测试
+ - 加入计时器，设置时间延迟，并设置单次触发
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/50617026/1734339575786-03997dda-06fa-4155-8b11-dcec88cd851d.png)
 
-    - 编写脚本，引入计时器（直接拖动上代码上方，按住control释放），下方打印后执行计时器，之后使用信号，执行计时器后重启游戏；
+ - 编写脚本，引入计时器（直接拖动上代码上方，按住control释放），下方打印后执行计时器，之后使用信号，执行计时器后重启游戏；
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/50617026/1734339975617-ce1202a8-1643-4690-b511-09428c636f68.png)
 
-```javascript
+```gdscript
 extends Area2D
-// 引入计时器的变量声明
+# 引入计时器的变量声明
 @onready var timer: Timer = $Timer
-// 玩家进入死亡地带后，触发_on_body_entered函数
+# 玩家进入死亡地带后，触发_on_body_entered函数
 func _on_body_entered(body: Node2D) -> void:
-// 打印“You died!”信息
+# 打印“You died!”信息
   print("You died!")
-// 执行计时器
+# 执行计时器
   timer.start()
-// 计时器结束，触发_on_timer_timeout函数
+# 计时器结束，触发_on_timer_timeout函数
 func _on_timer_timeout() -> void:
-// 执行重启游戏操作
+# 执行重启游戏操作
   get_tree().reload_current_scene()
 ```
 
-    - 设置玩家死亡慢放及碰撞体消除掉落地图：
+ - 设置玩家死亡慢放及碰撞体消除掉落地图：
 
-```javascript
+```gdscript
 extends Area2D
 @onready var timer: Timer = $Timer
 
 func _on_body_entered(body: Node2D) -> void:
   print("You died!")
-// 设置玩家进入死亡区域后，时间尺度慢放
+# 设置玩家进入死亡区域后，时间尺度慢放
   Engine.time_scale = 0.5
-// 设置玩家移除碰撞体并掉落地图：获取玩家变量，访问碰撞体节点，并移除
+# 设置玩家移除碰撞体并掉落地图：获取玩家变量，访问碰撞体节点，并移除
   body.get_node("CollisionShape2D").queue_free()
   timer.start()
 
 func _on_timer_timeout() -> void:
-// 计时器结束后，时间尺度恢复，避免新开始的游戏0.5倍速
+# 计时器结束后，时间尺度恢复，避免新开始的游戏0.5倍速
   Engine.time_scale = 1.0
   get_tree().reload_current_scene()
 ```
@@ -216,39 +216,39 @@ func _on_timer_timeout() -> void:
     - 使用process函数，不同于ready函数每局游戏开始前进触发一次，process在每一帧都会进行识别触发，适合用在随时间变化的元素上；比如移动敌人，<u>确保每一帧都微小的移动敌人即可</u>
     - 代码尝试
 
-```javascript
+```gdscript
 extends Node2D
-// 声明常量SPEED作为移动速度
+# 声明常量SPEED作为移动速度
 const SPEED = 60
-// Called every frame. 'delta' is the elapsed time since the previous frame.
+# Called every frame. 'delta' is the elapsed time since the previous frame.
   func _process(delta: float) -> void:
-// 使用delta补偿帧率波动导致的移动速度不固定
+# 使用delta补偿帧率波动导致的移动速度不固定
     position.x += SPEED * delta
 ```
 
 上述脚本可控制敌人匀速移动，但无法触发碰撞转向循环移动，代码调整如下：
 
-```javascript
+```gdscript
 extends Node2D
 
 const SPEED = 30
-// 声明变量初始值为1，向右侧移动
+# 声明变量初始值为1，向右侧移动
 var direction = 1
-// 添加raycast射线识别敌人左右是否发生碰撞，并应用变量
-// 引用敌人动画变量
+# 添加raycast射线识别敌人左右是否发生碰撞，并应用变量
+# 引用敌人动画变量
 @onready var ray_cast_right: RayCast2D = $RayCastRight
 @onready var ray_cast_left: RayCast2D = $RayCastLeft
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func _process(delta: float) -> void:
-// if语句判断若左右碰撞，调整方向，并调整动画flip_h属性，用布尔值换方向
+# if语句判断若左右碰撞，调整方向，并调整动画flip_h属性，用布尔值换方向
   if ray_cast_right.is_colliding():
     direction = -1
     animated_sprite.flip_h = true
   if ray_cast_left.is_colliding():
     direction = 1
     animated_sprite.flip_h = false
-// 标准的移动语法
+# 标准的移动语法
   position.x += direction * SPEED * delta
 
 ```
@@ -258,13 +258,13 @@ func _process(delta: float) -> void:
 + 可直接明明为GameManager，作为唯一的游戏管理器使用
 + 给该节点创建脚本，用来定义分数及计分函数
 
-```javascript
+```gdscript
 extends Node
 
-// 定义计分分数变量
+# 定义计分分数变量
 var score = 0
 
-// 创建函数，用来做拾取金币时计分
+# 创建函数，用来做拾取金币时计分
 func add_point():
   // 设置函数执行方式
   score += 1
@@ -274,17 +274,17 @@ func add_point():
 
 + 在拾取物脚本中引入变量，并调整脚本内容执行计分函数
 
-```javascript
+```gdscript
 extends Area2D
 
-// 引入GameManager节点；节点路径可右键节点选择唯一名称简化路径，防止出错，仅用于唯一场景的唯一管理器，不在同一场景不生效
+# 引入GameManager节点；节点路径可右键节点选择唯一名称简化路径，防止出错，仅用于唯一场景的唯一管理器，不在同一场景不生效
 @onready var game_manager: Node = %GameManager
 
-// 绑定节点触发信号
+# 绑定节点触发信号
 func _on_body_entered(body: Node2D) -> void:
-// 执行脚本
+# 执行脚本
   game_manager.add_point()
-// 设置收集并清除拾取物
+# 设置收集并清除拾取物
   queue_free()
 ```
 
@@ -294,17 +294,17 @@ func _on_body_entered(body: Node2D) -> void:
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/50617026/1734419957847-56c0829c-d80f-4e90-a35d-0331b0d8e3db.png)
 
-    - 改写脚本内容，文字替换
+ - 改写脚本内容，文字替换
 
-```javascript
+```gdscript
 extends Node
 
-// 定义计分分数变量
+# 定义计分分数变量
 var score = 0
-// 引入label节点
+# 引入label节点
 @onready var score_label: Label = $Score_Label
 
-// 创建函数，用来做拾取金币时计分
+# 创建函数，用来做拾取金币时计分
 func add_point():
   // 设置函数执行方式
   score += 1
@@ -318,7 +318,7 @@ func add_point():
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/50617026/1734421655257-d34c9351-d010-45d2-9154-f77150b3fcde.png)
 
-    - 为了让音频作为自动加载的场景，随着人物死亡也不会重新加载，将音乐节点拖入scenes文件夹储存为新场景，在项目设置自动加载中选择并设置音乐场景
+ - 为了让音频作为自动加载的场景，随着人物死亡也不会重新加载，将音乐节点拖入scenes文件夹储存为新场景，在项目设置自动加载中选择并设置音乐场景
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/50617026/1734421766102-28ff6da0-b263-4e3e-a059-1b891af0569b.png)
 
@@ -331,21 +331,21 @@ func add_point():
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/50617026/1734423124036-c1ad7ffc-bd5e-4730-84f0-e626b3f2f293.png)
 
-    - 点击添加轨道，选择方法调用轨道，选中拾取物节点，在第1秒处右键插入函数queue_free
+ - 点击添加轨道，选择方法调用轨道，选中拾取物节点，在第1秒处右键插入函数queue_free
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/50617026/1734423204400-3d682912-3a70-4b96-8250-36ff3e35ccdc.png)
 
-    - 在脚本中执行动画播放
+ - 在脚本中执行动画播放
 
-```javascript
+```gdscript
 extends Area2D
-// 引入音频播放器
+# 引入音频播放器
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-// 绑定节点触发信号
+# 绑定节点触发信号
 func _on_body_entered(body: Node2D) -> void:
-// 执行脚本
+# 执行脚本
   game_manager.add_point()
-// 设置音频播放器执行
+# 设置音频播放器执行
   animation_player.play("pickup")
 ```
 
