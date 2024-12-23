@@ -1,3 +1,5 @@
+[语法教程视频链接](https://www.bilibili.com/video/BV1Wz42127wh?spm_id_from=333.788.videopod.sections&vd_source=f2f0c4b25442f945a04f9cdb159461a4)
+
 ### Hello World
 
 - 创建空白测试场景（Main）
@@ -466,6 +468,7 @@ enum Alignment {Ally = 1, Neutral = 0, Enemy = -1}
 
 ### Composition-组合
 
+[关于组合更多的应用实例和讲解](https://www.bilibili.com/video/BV1Ns421w7nT/?share_source=copy_web&spm_id_from=333.788.comment.all.click&vd_source=7bca0171cc21043a855b81c081be807a)
 - 可将同类型代码进行组合优化代码结构
 - 可将代码组合到一个易于修改的地方
 - 利用组合创建组件，将攻击、健康、碰撞盒创建不同的组件，在场景不同元素中分别设置他们
